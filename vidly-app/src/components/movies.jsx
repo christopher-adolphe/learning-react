@@ -6,10 +6,6 @@ class Movies extends Component {
     movies: getMovies()
   }
 
-  render() {
-    return this.getMovies();
-  }
-
   getMovies() {
     const { movies } = this.state;
 
@@ -51,6 +47,10 @@ class Movies extends Component {
     deleteMovie(id);
 
     this.setState({ movies })
+  }
+
+  render() {
+    return this.getMovies();
   }
 }
  
