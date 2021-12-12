@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import Counter from './counter';
 
 class Counters extends Component {
+  componentDidUpdate() {
+    console.log('Counters - componentDidUpdate() method called');
+  }
+
   getCounters() {
-    const { counters, onIncrement, onDelete } = this.props;
+    const { counters, onIncrement, onDecrement, onDelete } = this.props;
 
     return counters.length
-      ? counters.map(counter => <Counter key={ counter.id } counter={ counter } onIncrement={ onIncrement } onDelete={ onDelete } />)
+      ? counters.map(counter => <Counter key={ counter.id } counter={ counter } onIncrement={ onIncrement } onDecrement= { onDecrement } onDelete={ onDelete } />)
       : <p>Sorry, there are no counters</p>
   }
 

@@ -52,13 +52,26 @@ class App extends Component {
     // is rendered into the DOM
   }
 
-  handlerIncrement = (counter) => {
+  componentDidUpdate() {
+    console.log('App - componentDidUpdate() method called');
+  }
+
+  handleIncrement = (counter) => {
     console.log('Incrementing count! ', counter);
 
     const counters = [ ...this.state.counters ];
     const index = counters.indexOf(counter);
 
     counters[index].value += 1;
+
+    this.setState({ counters });
+  }
+
+  handleDecrement = (counter) => {
+    const counters = [ ...this.state.counters ];
+    const index = counters.indexOf(counter);
+
+    counters[index].value -= 1;
 
     this.setState({ counters });
   }
@@ -92,7 +105,8 @@ class App extends Component {
         <main className="container mt-3">
           <Counters
             counters={ this.state.counters }
-            onIncrement={ this.handlerIncrement }
+            onIncrement={ this.handleIncrement }
+            onDecrement={ this.handleDecrement }
             onDelete={ this.handleDelete }
             onReset={ this.handleReset }
           />

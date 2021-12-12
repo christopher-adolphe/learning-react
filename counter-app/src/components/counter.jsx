@@ -17,6 +17,14 @@ class Counter extends Component {
   //   tags: ['tag1', 'tag2', 'tag3']
   // }
 
+  componentDidUpdate(prevProps, prevState) {
+    console.log('Counter - componentDidUpdate() method called', { prevProps, prevState });
+  }
+
+  componentWillUnmount() {
+    console.log('Counter - componentWillUnmount() method called');
+  }
+
   formatCount() {
     const { value } = this.props.counter;
 
@@ -25,11 +33,17 @@ class Counter extends Component {
 
   getBadgeClasses() {
     const { value } = this.props.counter;
-    let classes = 'badge m-2 bg-';
+    let classes = 'badge m-auto bg-';
 
     classes += value === 0 ? 'warning' : 'primary';
 
     return classes;
+  }
+
+  isButtonDisabled() {
+    const { value } = this.props.counter;
+
+    return value === 0 ? 'disabled' : '';
   }
 
   // getTags() {
@@ -67,10 +81,16 @@ class Counter extends Component {
     console.log('Counter - render() method called');
 
     return (
-      <div>
-        <span className={ this.getBadgeClasses() }>{ this.formatCount() }</span>
-        <button className="btn btn-secondary btn-sm" onClick={ () => this.props.onIncrement(this.props.counter) }>Increment</button>
-        <button className="btn btn-danger btn-sm m-2" onClick={ () => this.props.onDelete(this.props.counter.id) }>Delete</button>
+      <div className="row">
+        <div className="col-1">
+          <span className={ this.getBadgeClasses() }>{ this.formatCount() }</span>
+        </div>
+
+        <div className="col">
+          <button className="btn btn-secondary btn-sm m-2" onClick={ () => this.props.onIncrement(this.props.counter) }>+</button>
+          <button className="btn btn-secondary btn-sm m-2" onClick={ () => this.props.onDecrement(this.props.counter) } disabled={ this.isButtonDisabled() }>-</button>
+          <button className="btn btn-danger btn-sm m-2" onClick={ () => this.props.onDelete(this.props.counter.id) }>X</button>
+        </div>
       </div>
     );
   }
