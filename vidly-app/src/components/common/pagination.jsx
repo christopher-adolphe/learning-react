@@ -16,7 +16,7 @@ const Pagination = (props) => {
 
   const pages = _.range(1, pageCount + 1);
 
-  const isPageActive = (page) => {
+  const setPageActive = (page) => {
     return currentPage === page ? 'active' : '';
   };
 
@@ -25,7 +25,7 @@ const Pagination = (props) => {
       <ul className="pagination">
         {
           pages.map(page => (
-            <li className={ `page-item ${isPageActive(page)}` } key={ `page-${page}` }><a className="page-link" onClick={ () => onPageChange(page) }>{ page }</a></li>
+            <li className={ `page-item ${setPageActive(page)}` } key={ `page-${page}` }><a className="page-link" onClick={ () => onPageChange(page) }>{ page }</a></li>
           ))
         }
       </ul>

@@ -3,17 +3,20 @@ import Like from './common/like';
 import Filter from './common/filter';
 import Pagination from './common/pagination';
 import { getMovies, deleteMovie } from '../services/fakeMovieService';
+import { getGenres } from '../services/fakeGenreService';
 import { paginate } from '../utils/paginate';
 
 class Movies extends Component {
   state = {
     movies: [],
+    genres: [],
     currentPage: 1,
+    currentFilter: '',
     pageSize: 4
   }
 
   componentDidMount() {
-    this.setState({ movies: getMovies() });
+    this.setState({ movies: getMovies(), genres: getGenres() });
   }
 
   handleLike = (movie) => {
@@ -26,7 +29,7 @@ class Movies extends Component {
   }
 
   displayMovies() {
-    const { movies, currentPage, pageSize } = this.state;
+    const { movies, genres, currentPage, currentFilter, pageSize } = this.state;
     const count = movies.length;
     const paginatedMovies = paginate(movies, currentPage, pageSize);
 
@@ -35,7 +38,7 @@ class Movies extends Component {
           <div className="container">
             <div className="row">
               <div className="col-lg-2">
-                <Filter />
+                <Filter genres={ genres } currentFilter= { currentFilter } onFilterChange={ this.handleFilterChange } />
               </div>
               <div className="col-lg-10">
                 <p>Showing { `${count} ${count > 1 ? `movies` : `movie`} ` } in the database</p>
@@ -67,7 +70,7 @@ class Movies extends Component {
                   </tbody>
                 </table>
 
-                <Pagination itemCount="{ count }" currentPage={ currentPage } pageSize={ pageSize } onPageChange={ this.handlePageChange } />
+                <Pagination itemCount={ count } currentPage={ currentPage } pageSize={ pageSize } onPageChange={ this.handlePageChange } />
               </div>
             </div>
           </div>
@@ -85,6 +88,14 @@ class Movies extends Component {
 
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
+  }
+
+  handleFilterChange = (genre) => {
+    let { movies } = this.state;
+
+    movies = movies.filter(movie => movie.genre.name === genre);
+
+    this.setState({ currentFilter: genre, movies });
   }
 
   render() {
