@@ -91,9 +91,14 @@ class Movies extends Component {
   }
 
   handleFilterChange = (genre) => {
+    const moviesList = getMovies();
     let { movies } = this.state;
 
-    movies = movies.filter(movie => movie.genre.name === genre);
+    if (genre === '') {
+      movies = [ ...moviesList ];
+    } else {
+      movies = moviesList.filter(movie => movie.genre.name === genre);
+    }
 
     this.setState({ currentFilter: genre, movies });
   }
