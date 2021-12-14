@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Like from './common/like';
+import MoviesTable from './moviesTable';
 import Filter from './common/filter';
 import Pagination from './common/pagination';
 import { getMovies, deleteMovie } from '../services/fakeMovieService';
@@ -11,12 +11,14 @@ class Movies extends Component {
     movies: [],
     genres: [],
     currentPage: 1,
-    currentFilter: '',
+    currentFilter: 'All genres',
     pageSize: 4
   }
 
   componentDidMount() {
-    this.setState({ movies: getMovies(), genres: getGenres() });
+    const genres = [ { _id: 'default', name: 'All genres' }, ...getGenres() ];
+
+    this.setState({ movies: getMovies(), genres });
   }
 
   handleLike = (movie) => {
@@ -30,51 +32,26 @@ class Movies extends Component {
 
   displayMovies() {
     const { movies, genres, currentPage, currentFilter, pageSize } = this.state;
-    const count = movies.length;
-    const paginatedMovies = paginate(movies, currentPage, pageSize);
+    const filteredMovies = currentFilter !== 'All genres' ? movies.filter(movie => movie.genre.name === currentFilter) : movies;
+    const count = filteredMovies.length;
+    const paginatedMovies = paginate(filteredMovies, currentPage, pageSize);
 
     return count
-      ? <React.Fragment>
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-2">
-                <Filter genres={ genres } currentFilter= { currentFilter } onFilterChange={ this.handleFilterChange } />
-              </div>
-              <div className="col-lg-10">
-                <p>Showing { `${count} ${count > 1 ? `movies` : `movie`} ` } in the database</p>
-                <table className="table table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">Title</th>
-                      <th scope="col">Genre</th>
-                      <th scope="col">Stock</th>
-                      <th scope="col">Rate</th>
-                      <th scope="col"></th>
-                      <th scope="col"></th>
-                    </tr>
-                  </thead>
+      ? <div className="container">
+          <div className="row">
+            <div className="col-2">
+              <Filter genres={ genres } currentFilter= { currentFilter } onFilterChange={ this.handleFilterChange } />
+            </div>
+            <div className="col">
+              <p>Showing { `${count} ${count > 1 ? `movies` : `movie`} ` } in the database</p>
 
-                  <tbody>
-                    {
-                      paginatedMovies.map(movie => (
-                        <tr key={ movie._id }>
-                          <th scope="row">{ movie.title }</th>
-                          <td>{ movie.genre.name }</td>
-                          <td>{ movie.numberInStock }</td>
-                          <td>{ movie.dailyRentalRate }</td>
-                          <td><Like liked={ movie.liked } onLike={ () => this.handleLike(movie) } /></td>
-                          <td><button className="btn btn-danger btn-sm" onClick={ () => this.handleDeleteMovie(movie._id) }>Delete</button></td>
-                        </tr>
-                      ))
-                    }
-                  </tbody>
-                </table>
+              <MoviesTable movies={ paginatedMovies } onLikeMovie={ this.handleLike } onDeleteMovie={ this.handleDeleteMovie }/>
 
-                <Pagination itemCount={ count } currentPage={ currentPage } pageSize={ pageSize } onPageChange={ this.handlePageChange } />
-              </div>
+              <Pagination itemCount={ count } currentPage={ currentPage } pageSize={ pageSize } onPageChange={ this.handlePageChange } />
             </div>
           </div>
-        </React.Fragment> 
+        </div>
+        
     : <p>Sorry, there are no movies in the database.</p>
   }
 
@@ -91,16 +68,7 @@ class Movies extends Component {
   }
 
   handleFilterChange = (genre) => {
-    const moviesList = getMovies();
-    let { movies } = this.state;
-
-    if (genre === '') {
-      movies = [ ...moviesList ];
-    } else {
-      movies = moviesList.filter(movie => movie.genre.name === genre);
-    }
-
-    this.setState({ currentFilter: genre, movies });
+    this.setState({ currentFilter: genre, currentPage: 1 });
   }
 
   render() {

@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Filter = (props) => {
-  const { genres, currentFilter, onFilterChange } = props;
+  const { genres, valueProperty, textProperty, currentFilter, onFilterChange } = props;
 
   const setFilterActive = (genre) => {
     return currentFilter === genre ? 'active' : '';
@@ -9,14 +10,25 @@ const Filter = (props) => {
 
   return (
     <div className="btn-group-vertical" role="group" aria-label="Filter movies by genre">
-      <button type="button" className="btn btn-outline-secondary" onClick={ () => onFilterChange('') }>All Genres</button>
       {
         genres.map(genre => (
-          <button key={ genre._id } type="button" className={ `btn btn-outline-secondary ${setFilterActive(genre.name)}` } onClick={ () => onFilterChange(genre.name) }>{ genre.name }</button>
+          <button key={ genre[valueProperty] } type="button" className={ `btn btn-outline-secondary ${setFilterActive(genre[textProperty])}` } onClick={ () => onFilterChange(genre[textProperty]) }>{ genre.name }</button>
         ))
       }
     </div>
-  );;
+  );
 }
+
+// Setting default values to component props
+Filter.defaultProps = {
+  valueProperty: '_id',
+  textProperty: 'name'
+};
+
+Filter.propTypes = {
+  genres: PropTypes.array.isRequired,
+  currentFilter: PropTypes.string.isRequired,
+  onFilterChange: PropTypes.func.isRequired
+};
  
 export default Filter;
