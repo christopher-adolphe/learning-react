@@ -23,12 +23,19 @@ class Movies extends Component {
     this.setState({ movies: getMovies(), genres });
   }
 
-  displayMovies() {
-    const { movies, genres, currentPage, currentFilter, pageSize, sortColumn } = this.state;
+  getpaginatedData() {
+    const { movies, currentPage, currentFilter, pageSize, sortColumn } = this.state;
     const filteredMovies = currentFilter !== 'All genres' ? movies.filter(movie => movie.genre.name === currentFilter) : movies;
     const count = filteredMovies.length;
     const sortedMovies = _.orderBy(filteredMovies, [sortColumn.path], [sortColumn.order]);
-    const paginatedMovies = paginate(sortedMovies, currentPage, pageSize);
+    const paginatedData = paginate(sortedMovies, currentPage, pageSize);
+
+    return { count, paginatedData };
+  }
+
+  displayMovies() {
+    const { genres, currentPage, currentFilter, pageSize, sortColumn } = this.state;
+    const { count, paginatedData: movies } = this.getpaginatedData();
 
     return count
       ? <div className="container">
@@ -40,7 +47,7 @@ class Movies extends Component {
               <p>Showing { `${count} ${count > 1 ? `movies` : `movie`} ` } in the database</p>
 
               <MoviesTable
-                movies={ paginatedMovies }
+                movies={ movies }
                 sortColumn={ sortColumn }
                 onLikeMovie={ this.handleLike }
                 onDeleteMovie={ this.handleDeleteMovie }
