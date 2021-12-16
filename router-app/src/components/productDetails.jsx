@@ -6,9 +6,11 @@ class ProductDetails extends Component {
   };
 
   render() {
+    const { id } = this.props.match.params;
+    
     return (
       <div>
-        <h1>Product Details - </h1>
+        <h1>Product Details - { id }</h1>
         <button onClick={this.handleSave}>Save</button>
       </div>
     );
