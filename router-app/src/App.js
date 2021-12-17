@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import { Routes, Route, useParams } from 'react-router-dom';
+import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import NavBar from "./components/navbar";
 import Products from "./components/products";
 import Posts from "./components/posts";
 import Home from "./components/home";
 import Dashboard from "./components/admin/dashboard";
+import AdminPosts from "./components/admin/posts";
+import Users from "./components/admin/users";
 import ProductDetails from "./components/productDetails";
 import NotFound from "./components/notFound";
 import "./App.css";
@@ -29,8 +31,10 @@ class App extends Component {
     // the `useParams` hook could the be used directly
     const ProductDetailsWrapper = (props) => {
       const params = useParams();
+      // Using the `useNavigate()` hook to navigate programmatically
+      const navigate = useNavigate();
 
-      return <ProductDetails { ...{ ...props, match: { params } } } />
+      return <ProductDetails { ...{ ...props, match: { params }, navigate } } />
     };
 
     return (
@@ -43,7 +47,11 @@ class App extends Component {
             <Route path="products" element={ <Products /> } />
             <Route path="products/:id" element={ <ProductDetailsWrapper /> } />
             <Route path="posts/:year/:month" element={ <Posts /> } />
-            <Route path="admin" element={ <Dashboard /> } />
+            <Route path="admin" element={ <Dashboard /> }>
+              <Route path="admin/posts" element={ <AdminPosts /> } />
+              <Route path="admin/users" element={ <Users /> } />
+            </Route>
+            <Route path="*" element={ <NotFound /> } />
           </Routes>
         </div>
       </div>

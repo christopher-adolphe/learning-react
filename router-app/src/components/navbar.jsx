@@ -14,7 +14,7 @@ const NavBar = () => {
         <Link to="/products">Products</Link>
       </li>
       <li>
-        <Link to="/posts/2018/02">Posts</Link>
+        <Link to="/posts/2018/02?sortyBy=newest">Posts</Link>
       </li>
       <li>
         <Link to="/admin">Admin</Link>

@@ -1,8 +1,12 @@
 import React, { Component } from "react";
+import { useNavigate } from 'react-router-dom';
 
 class ProductDetails extends Component {
   handleSave = () => {
     // Navigate to /products
+    const { navigate } = this.props;
+    
+    navigate({ pathname: '/products' });
   };
 
   render() {
