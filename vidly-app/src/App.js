@@ -1,13 +1,19 @@
-import Movies from './components/movies';
+import { Fragment } from 'react';
+import { Outlet } from 'react-router-dom';
 import './App.css';
+import NavBar from './components/navBar';
 
 function App() {
   return (
-    <div className="col-lg-8 mx-auto p-3 py-md-5">
-      <main>
-        <Movies />
-      </main>
+    <Fragment>
+      <NavBar />
+
+      <div className="col-lg-8 mx-auto p-3 py-md-5">
+        <main>
+          <Outlet />
+        </main>
     </div>
+    </Fragment>
   );
 }
 
