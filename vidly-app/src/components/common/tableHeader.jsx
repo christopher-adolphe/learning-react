@@ -18,7 +18,7 @@ class TableHeader extends Component {
     }
 
     onSortMovie(sortColumn);
-  }
+  };
 
   renderSortIcon(column) {
     const { sortColumn } = this.props;

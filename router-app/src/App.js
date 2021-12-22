@@ -26,7 +26,7 @@ class App extends Component {
     // new `match` property which is contain the url parameters
     // obtained from the `useParams` hook
 
-    // Alternatively, the the `ProductDetails` component can
+    // Alternatively, the `ProductDetails` component can
     // be converted into a stateless functional component where
     // the `useParams` hook could the be used directly
     const ProductDetailsWrapper = (props) => {

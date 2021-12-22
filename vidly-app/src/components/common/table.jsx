@@ -1,6 +1,6 @@
 import React from 'react';
 import TableHeader from './tableHeader';
-import TableBody from './TableBody';
+import TableBody from './tableBody';
 
 const Table = ({ columns, sortColumn, data, onSortMovie }) => {
   return (

@@ -15,7 +15,7 @@ class Movies extends Component {
     currentFilter: 'All genres',
     pageSize: 4,
     sortColumn: { path: 'title', order: 'asc' }
-  }
+  };
 
   componentDidMount() {
     const genres = [ { _id: '', name: 'All genres' }, ...getGenres() ];
@@ -68,7 +68,7 @@ class Movies extends Component {
     movies[index].liked = !movies[index].liked;
 
     this.setState({ movies });
-  }
+  };
 
   handleDeleteMovie = (id) => {
     const movies = this.state.movies.filter(movie => movie._id !== id);
@@ -76,19 +76,19 @@ class Movies extends Component {
     deleteMovie(id);
 
     this.setState({ movies })
-  }
+  };
 
   handleSortMovie = (sortColumn) => {
     this.setState({ sortColumn })
-  }
+  };
 
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
-  }
+  };
 
   handleFilterChange = (genre) => {
     this.setState({ currentFilter: genre, currentPage: 1 });
-  }
+  };
 
   render() {
     return this.displayMovies();

@@ -9,6 +9,7 @@ import Movies from './components/movies';
 import Movie from './components/movie';
 import Customers from './components/customers';
 import Rentals from './components/rentals';
+import LoginForm from './components/loginForm';
 import NotFound from './components/notFound';
 import reportWebVitals from './reportWebVitals';
 
@@ -22,6 +23,7 @@ ReactDOM.render(
           <Route path="movies" element={ <Movies /> } />
           <Route path="customers" element={ <Customers /> } />
           <Route path="rentals" element={ <Rentals /> } />
+          <Route path="login" element={ <LoginForm /> } />
           <Route path="*" element={ <NotFound /> } />
         </Route>
       </Routes>
