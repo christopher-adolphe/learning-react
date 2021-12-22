@@ -10,7 +10,7 @@ const NavBar = (props) => {
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <NavLink className="nav-link" to="/">Movies</NavLink>
+              <NavLink className="nav-link" to="/movies">Movies</NavLink>
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="customers">Customers</NavLink>

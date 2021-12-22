@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Outlet } from 'react-router-dom';
-import './App.css';
 import NavBar from './components/navBar';
+import './App.css';
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         <main>
           <Outlet />
         </main>
-    </div>
+      </div>
     </Fragment>
   );
 }

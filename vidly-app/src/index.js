@@ -19,6 +19,7 @@ ReactDOM.render(
         <Route path="/" element={ <App /> }>
           <Route index element={ <Movies /> } />
           <Route path="movies/:id" element={ <Movie /> } />
+          <Route path="movies" element={ <Movies /> } />
           <Route path="customers" element={ <Customers /> } />
           <Route path="rentals" element={ <Rentals /> } />
           <Route path="*" element={ <NotFound /> } />
