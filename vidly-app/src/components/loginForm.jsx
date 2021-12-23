@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Joi from 'joi-browser';
 import BaseInput from './common/baseInput';
 
 class LoginForm extends Component {
@@ -25,19 +26,61 @@ class LoginForm extends Component {
     errors: {}
   };
 
+  // Using `Joi` to set a schema to handle form validation
+  schema = {
+    username: Joi.string().required().label('Username'),
+    password: Joi.string().required().label('Password')
+  };
+
   validate() {
-    const { account } = this.state;
+    // const { username, password } = this.state.account;
+    // const errors = {};
+
+    // if (username.trim() === '') {
+    //   errors.username = 'Username is required';
+    // }
+
+    // if (password.trim() === '') {
+    //   errors.password = 'Password is required';
+    // }
+
+    // return Object.keys(errors).length ? errors : null;
+
+    // Refactoring the `validate()` method to handle the validation with `Joi`
+    // Using the `validate()` method from `Joi` and passing the oject we want to
+    // validate and the schema against which we want to run the validation
+    const options = { abortEarly: false };
+    const { error } = Joi.validate(this.state.account, this.schema, options);
+
+    console.log('validate result: ', error);
+
+    if (!error) {
+      return null;
+    }
+
     const errors = {};
 
-    if (account.username.trim() === '') {
-      errors.username = 'Username is required';
+    for (let item of error.details) {
+      errors[item.path[0]] = item.message;
     }
 
-    if (account.password.trim() === '') {
-      errors.password = 'Password is required';
+    return errors;
+  }
+
+  validateInput = ({ name, value }) => {
+    console.log('validateInput name: ', name);
+    console.log('validateInput value: ', value);
+    if (name === 'username') {
+      if (value.trim() === '') {
+        return 'Username is required';
+      }
     }
 
-    return Object.keys(errors).length ? errors : null;
+    if (name === 'password') {
+      if (value.trim() === '') {
+        return 'Password is required';
+      }
+    }
   }
 
   handleSubmit = (event) => {
@@ -48,30 +91,35 @@ class LoginForm extends Component {
 
     const errors = this.validate(event.currentTarget);
 
-    console.log('handleSubmit errors: ', errors);
-
-    this.setState({ errors });
+    this.setState({ errors: errors || {} });
 
     if (errors) {
       return;
     }
-
-    console.log('handleSubmit called...');
   };
 
   // Using object destructuring to rename the `event.currentTarget` property
   handleChange = ({ currentTarget: input }) => {
     const account = { ...this.state.account };
+    const errors = { ...this.state.errors };
+    const errorMessage = this.validateInput(input);
+
+    if (errorMessage) {
+      errors[input.name] = errorMessage;
+    } else {
+      delete errors[input.name];
+    }
+    
 
     // Using the `event.currentTarget` property to get the
     // value of the username input
     account[input.name] = input.value;
 
-    this.setState({ account });
+    this.setState({ account, errors });
   };
 
   render() {
-    const { username, password } = this.state.account;
+    const { account, errors } = this.state;
 
     return (
       <div className="container">
@@ -94,9 +142,9 @@ class LoginForm extends Component {
                 <input type="password" className="form-control" id="password" name="password" value={ password } onChange={ this.handleChange } />
               </div> */}
 
-              <BaseInput label="Username" type="text" name="username" value={ username } onInputChange={ this.handleChange } />
+              <BaseInput label="Username" type="text" name="username" value={ account.username } error={ errors.username || null } onInputChange={ this.handleChange } />
               
-              <BaseInput label="Password" type="password" name="password" value={ password } onInputChange={ this.handleChange } />
+              <BaseInput label="Password" type="password" name="password" value={ account.password } error={ errors.password || null } onInputChange={ this.handleChange } />
 
               <button type="submit" className="btn btn-primary">Login</button>
             </form>
