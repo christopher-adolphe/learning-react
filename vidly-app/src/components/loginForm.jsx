@@ -68,19 +68,24 @@ class LoginForm extends Component {
   }
 
   validateInput = ({ name, value }) => {
-    console.log('validateInput name: ', name);
-    console.log('validateInput value: ', value);
-    if (name === 'username') {
-      if (value.trim() === '') {
-        return 'Username is required';
-      }
-    }
+    // if (name === 'username') {
+    //   if (value.trim() === '') {
+    //     return 'Username is required';
+    //   }
+    // }
 
-    if (name === 'password') {
-      if (value.trim() === '') {
-        return 'Password is required';
-      }
-    }
+    // if (name === 'password') {
+    //   if (value.trim() === '') {
+    //     return 'Password is required';
+    //   }
+    // }
+
+    // Refactoring the `validate()` method to handle the validation with `Joi`
+    const input = { [name]: value };
+    const inputSchema = { [name]: this.schema[name] };
+    const { error } = Joi.validate(input, inputSchema);
+
+    return error ? error.details[0].message : null;
   }
 
   handleSubmit = (event) => {
