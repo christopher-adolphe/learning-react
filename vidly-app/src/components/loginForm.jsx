@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Joi from 'joi-browser';
-import BaseInput from './common/baseInput';
+import Form from './common/form';
 
-class LoginForm extends Component {
+class LoginForm extends Form {
   // Using the `createRef()` method to add a reference to
   // an element in the component's jsx template so that we
   // can get access to this DOM element inside the component's
@@ -22,7 +22,7 @@ class LoginForm extends Component {
     // DON'T DO THIS => account: { username: null, password: null }
     // NOR THIS => account: { username: '' }
     // Both would cause errors
-    account: { username: '', password: '' },
+    data: { username: '', password: '' },
     errors: {}
   };
 
@@ -32,100 +32,12 @@ class LoginForm extends Component {
     password: Joi.string().required().label('Password')
   };
 
-  validate() {
-    // const { username, password } = this.state.account;
-    // const errors = {};
-
-    // if (username.trim() === '') {
-    //   errors.username = 'Username is required';
-    // }
-
-    // if (password.trim() === '') {
-    //   errors.password = 'Password is required';
-    // }
-
-    // return Object.keys(errors).length ? errors : null;
-
-    // Refactoring the `validate()` method to handle the validation with `Joi`
-    // Using the `validate()` method from `Joi` and passing the oject we want to
-    // validate and the schema against which we want to run the validation
-    const options = { abortEarly: false };
-    const { error } = Joi.validate(this.state.account, this.schema, options);
-
-    console.log('validate result: ', error);
-
-    if (!error) {
-      return null;
-    }
-
-    const errors = {};
-
-    for (let item of error.details) {
-      errors[item.path[0]] = item.message;
-    }
-
-    return errors;
-  }
-
-  validateInput = ({ name, value }) => {
-    // if (name === 'username') {
-    //   if (value.trim() === '') {
-    //     return 'Username is required';
-    //   }
-    // }
-
-    // if (name === 'password') {
-    //   if (value.trim() === '') {
-    //     return 'Password is required';
-    //   }
-    // }
-
-    // Refactoring the `validate()` method to handle the validation with `Joi`
-    const input = { [name]: value };
-    const inputSchema = { [name]: this.schema[name] };
-    const { error } = Joi.validate(input, inputSchema);
-
-    return error ? error.details[0].message : null;
-  }
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-
-    // Using the `username` ref to access the input element
-    // const username = this.username.current.value;
-
-    const errors = this.validate(event.currentTarget);
-
-    this.setState({ errors: errors || {} });
-
-    if (errors) {
-      return;
-    }
-  };
-
-  // Using object destructuring to rename the `event.currentTarget` property
-  handleChange = ({ currentTarget: input }) => {
-    const account = { ...this.state.account };
-    const errors = { ...this.state.errors };
-    const errorMessage = this.validateInput(input);
-
-    if (errorMessage) {
-      errors[input.name] = errorMessage;
-    } else {
-      delete errors[input.name];
-    }
-    
-
-    // Using the `event.currentTarget` property to get the
-    // value of the username input
-    account[input.name] = input.value;
-
-    this.setState({ account, errors });
+  doSubmit = () => {
+    // TODO: Perform call to server to send data from the form
+    console.log('doSubmit called!');
   };
 
   render() {
-    const { account, errors } = this.state;
-
     return (
       <div className="container">
         <div className="row">
@@ -138,7 +50,7 @@ class LoginForm extends Component {
                 Setting the `ref` attribute on the input element
                 <input type="text" className="form-control" id="username" ref={ this.username } />
 
-                Creating a controlled element by binding the `account.username` state to the `value` attribute of the input element
+                Creating a controlled element by binding the `data.username` state to the `value` attribute of the input element
                 <input autoFocus type="text" className="form-control" id="username" name="username" value={ username } onChange={ this.handleChange } />
               </div> */}
 
@@ -147,11 +59,16 @@ class LoginForm extends Component {
                 <input type="password" className="form-control" id="password" name="password" value={ password } onChange={ this.handleChange } />
               </div> */}
 
-              <BaseInput label="Username" type="text" name="username" value={ account.username } error={ errors.username || null } onInputChange={ this.handleChange } />
-              
-              <BaseInput label="Password" type="password" name="password" value={ account.password } error={ errors.password || null } onInputChange={ this.handleChange } />
 
-              <button type="submit" className="btn btn-primary">Login</button>
+              {/* <BaseInput label="Username" type="text" name="username" value={ data.username } error={ errors.username || null } onInputChange={ this.handleChange } />
+              
+              <BaseInput label="Password" type="password" name="password" value={ data.password } error={ errors.password || null } onInputChange={ this.handleChange } /> */}
+
+              { this.renderFormInput('Username', 'username') }
+
+              { this.renderFormInput('Password', 'password', 'password') }
+
+              { this.renderFormButton('Login') }
             </form>
           </div>
         </div>
