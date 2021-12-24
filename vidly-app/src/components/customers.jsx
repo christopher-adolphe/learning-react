@@ -6,7 +6,7 @@ class Customers extends Component {
       <div className="container">
         <div className="row">
           <div className="col">
-            <h1>Customers</h1>
+            <h1 className="mb-4">Customers</h1>
           </div>
         </div>
       </div>

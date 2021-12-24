@@ -34,15 +34,15 @@ class LoginForm extends Form {
 
   doSubmit = () => {
     // TODO: Perform call to server to send data from the form
-    console.log('doSubmit called!');
+    console.log('doSubmit called to login!');
   };
 
   render() {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-4 mx-auto">
-            <h1>Login</h1>
+          <div className="col-4">
+            <h1 className="mb-4">Login</h1>
 
             <form onSubmit={ this.handleSubmit }>
               {/* <div className="mb-3">

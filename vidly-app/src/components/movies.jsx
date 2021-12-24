@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import MoviesTable from './moviesTable';
 import Filter from './common/filter';
@@ -44,6 +45,8 @@ class Movies extends Component {
               <Filter genres={ genres } currentFilter= { currentFilter } onFilterChange={ this.handleFilterChange } />
             </div>
             <div className="col">
+              <Link className="btn btn-primary mb-4" to="/movies/new">New Movie</Link>
+
               <p>Showing { `${count} ${count > 1 ? `movies` : `movie`} ` } in the database</p>
 
               <MoviesTable
