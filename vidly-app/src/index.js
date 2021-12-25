@@ -34,6 +34,7 @@ ReactDOM.render(
           <Route path="rentals" element={ <Rentals /> } />
           <Route path="login" element={ <LoginForm /> } />
           <Route path="register" element={ <RegisterForm /> } />
+          <Route path="not-found" element={ <NotFound /> } />
           <Route path="*" element={ <NotFound /> } />
         </Route>
       </Routes>

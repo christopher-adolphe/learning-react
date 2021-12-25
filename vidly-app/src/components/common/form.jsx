@@ -57,6 +57,7 @@ class Form extends Component {
 
     // Refactoring the `validate()` method to handle the validation with `Joi`
     const input = { [name]: value };
+    console.log('input: ', input);
     const inputSchema = { [name]: this.schema[name] };
     const { error } = Joi.validate(input, inputSchema);
 
@@ -92,7 +93,6 @@ class Form extends Component {
       delete errors[input.name];
     }
     
-
     // Using the `event.currentTarget` property to get the
     // value of the username input
     data[input.name] = input.value;

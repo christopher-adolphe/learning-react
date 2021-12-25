@@ -8,7 +8,7 @@ const BaseInput = ({ label, type, name, value, error, onInputChange }) => {
 
   return (
     <div className="mb-3">
-      <label htmlFor={ name } className="form-label">{ label }</label>
+      { label.length ? <label htmlFor={ name } className="form-label">{ label }</label> : '' }
       <input type={ type } className={ inputClasses } id={ name } name={ name } value={ value } onChange={ onInputChange } />
       { error ? <div className="invalid-feedback">{ error }</div> : '' }
     </div>

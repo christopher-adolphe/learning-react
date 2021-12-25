@@ -4,27 +4,6 @@ import Form from './common/form';
 import { getGenres } from '../services/fakeGenreService';
 import { getMovie, saveMovie } from '../services/fakeMovieService';
 
-// const Movie = () => {
-//   const navigate = useNavigate();
-//   const params = useParams();
-
-//   const handleSave = () => {
-//     navigate('/');
-//   };
-
-//   return (
-//     <div className="container">
-//       <div className="row">
-//         <div className="col">
-//           <h1 className="mb-4">Movie Form { params.id }</h1>
-
-//           <button type="button" className="btn btn-primary" onClick={ handleSave }>Save</button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
 class Movie extends Form {
   state = {
     data: {
@@ -60,7 +39,9 @@ class Movie extends Form {
     const movie = getMovie(movieId);
     
     if (!movie) {
-      return navigate({ pathname: '/movies' });
+      navigate({ pathname: '/not-found' });
+
+      return;
     }
 
     this.setState({ data: this.mapToViewModel(movie) });
