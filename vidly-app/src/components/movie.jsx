@@ -29,7 +29,7 @@ class Movie extends Form {
   state = {
     data: {
       title: '',
-      genre: '',
+      genreId: '',
       numberInStock: '',
       dailyRentalRate: '',
     },
@@ -37,47 +37,48 @@ class Movie extends Form {
     errors: {}
   };
 
-  componentDidMount() {
-    const { id } = this.props.match.params;
-    const genres = [ { _id: '', name: '' }, ...getGenres() ];
-    
-    if (id) {
-      const movie = getMovie(id);
-      const data = {
-        title: movie.title,
-        genre: movie.genre.name,
-        numberInStock: `${movie.numberInStock}`,
-        dailyRentalRate: `${movie.dailyRentalRate}`
-      }
-
-      this.setState({ data, genres });
-    }
-    
-    this.setState({ genres });
-  }
-
-  // genreSchema = {
-  //   _id: Joi.string().required(),
-  //   name: Joi.string().required()
-  // }
-
   schema = {
-    title: Joi.string().required().label('Name'),
-    genre: Joi.string().required().label('Genre'),
+    _id: Joi.string(),
+    title: Joi.string().required().label('Title'),
+    genreId: Joi.string().required().label('Genre'),
     numberInStock: Joi.number().required().min(0).max(100).label('Number in Stock'),
     dailyRentalRate: Joi.number().required().min(0).max(10).label('Rate')
   };
 
-  doSubmit = () => {
+  componentDidMount() {
     const { navigate } = this.props;
-    const movie = { ...this.state.data };
-    const genre = this.state.genres.find(genre => genre.name === movie.genre);
+    const genres = [ ...getGenres() ];
+    
+    this.setState({ genres });
 
-    if (!genre) {
+    const movieId = this.props.match.params.id;
+
+    if (movieId === 'new') {
       return;
     }
 
-    movie.genre = { ...genre };
+    const movie = getMovie(movieId);
+    
+    if (!movie) {
+      return navigate({ pathname: '/movies' });
+    }
+
+    this.setState({ data: this.mapToViewModel(movie) });
+  }
+
+  mapToViewModel(movie) {
+    return {
+      _id: movie._id,
+      title: movie.title,
+      genreId: movie.genre._id,
+      numberInStock: movie.numberInStock,
+      dailyRentalRate: movie.dailyRentalRate
+    }
+  }
+
+  doSubmit = () => {
+    const { navigate } = this.props;
+    const movie = { ...this.state.data };
 
     saveMovie(movie);
     
@@ -95,9 +96,9 @@ class Movie extends Form {
 
             <form onSubmit={ this.handleSubmit }>
               { this.renderFormInput('Title', 'title') }
-              { this.renderFormSelect('Genre', 'genre', genres) }
-              { this.renderFormInput('Number in Stock', 'numberInStock') }
-              { this.renderFormInput('Rate', 'dailyRentalRate') }
+              { this.renderFormSelect('Genre', 'genreId', genres) }
+              { this.renderFormInput('Number in Stock', 'numberInStock', 'number') }
+              { this.renderFormInput('Rate', 'dailyRentalRate', 'number') }
               { this.renderFormButton('Save') }
             </form>
           </div>
