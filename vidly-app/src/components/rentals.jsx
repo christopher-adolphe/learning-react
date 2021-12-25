@@ -6,7 +6,7 @@ class Rentals extends Component {
       <div className="container">
         <div className="row">
           <div className="col">
-            <h1>Rentals</h1>
+            <h1 className="mb-4">Rentals</h1>
           </div>
         </div>
       </div>

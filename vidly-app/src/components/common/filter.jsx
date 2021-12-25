@@ -9,7 +9,7 @@ const Filter = (props) => {
   }
 
   return (
-    <div className="btn-group-vertical" role="group" aria-label="Filter movies by genre">
+    <div className="btn-group-vertical btn-group-filter" role="group" aria-label="Filter movies by genre">
       {
         genres.map(genre => (
           <button key={ genre[valueProperty] } type="button" className={ `btn btn-outline-secondary ${setFilterActive(genre[textProperty])}` } onClick={ () => onFilterChange(genre[textProperty]) }>{ genre.name }</button>
