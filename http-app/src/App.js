@@ -97,7 +97,7 @@ class App extends Component {
 
     try {
       // 3. Performing the call to the backend to update the database
-      await http.delete(`${config.apiEndpoint}/${post.id}`);
+      await http.delete(`s${config.apiEndpoint}/${post.id}`);
       // throw new Error('Something went wrong while deleting post!');
     } catch (error) {
       // Expected errors (404: not found, 400: bad request) -> CLIENT ERRORS
