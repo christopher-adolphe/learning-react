@@ -5,8 +5,9 @@ import MoviesTable from './moviesTable';
 import Filter from './common/filter';
 import Search from './common/search';
 import Pagination from './common/pagination';
-import { getMovies, deleteMovie } from '../services/fakeMovieService';
-import { getGenres } from '../services/fakeGenreService';
+// import { getMovies, deleteMovie } from '../services/fakeMovieService';
+import { getMovies, deleteMovie } from '../services/movieService';
+import { getGenres } from '../services/genreService';
 import { paginate } from '../utils/paginate';
 
 class Movies extends Component {
@@ -20,10 +21,10 @@ class Movies extends Component {
     searchQuery: ''
   };
 
-  componentDidMount() {
-    const genres = [ { _id: '', name: 'All genres' }, ...getGenres() ];
+  async componentDidMount() {
+    const genres = [ { _id: '', name: 'All genres' }, ...await getGenres() ];
 
-    this.setState({ movies: getMovies(), genres });
+    this.setState({ movies: await getMovies(), genres });
   }
 
   getpaginatedData() {
@@ -84,10 +85,10 @@ class Movies extends Component {
     this.setState({ movies });
   };
 
-  handleDeleteMovie = (id) => {
+  handleDeleteMovie = async (id) => {
     const movies = this.state.movies.filter(movie => movie._id !== id);
 
-    deleteMovie(id);
+    await deleteMovie(id);
 
     this.setState({ movies })
   };

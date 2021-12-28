@@ -13,7 +13,7 @@ const BaseSelect = ({ label, name, options, value, error, onInputChange }) => {
         <option value="" />
         {
           options.map(option => (
-            <option key={ option._id } value={ option._id }>{ option.name }</option>
+            <option key={ option._id } value={ option._id } selected={ option._id === value ? true : false }>{ option.name }</option>
           ))
         }
       </select>

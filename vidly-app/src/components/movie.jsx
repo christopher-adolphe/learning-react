@@ -1,15 +1,17 @@
 import React from 'react';
 import Joi from 'joi-browser';
 import Form from './common/form';
-import { getGenres } from '../services/fakeGenreService';
-import { getMovie, saveMovie } from '../services/fakeMovieService';
+// import { getGenres } from '../services/fakeGenreService';
+// import { getMovie, saveMovie } from '../services/fakeMovieService';
+import { getGenres } from '../services/genreService';
+import { getMovie, saveMovie } from '../services/movieService';
 
 class Movie extends Form {
   state = {
     data: {
       title: '',
       genreId: '',
-      numberInStock: '',
+      amountInStock: '',
       dailyRentalRate: '',
     },
     genres: [],
@@ -20,13 +22,13 @@ class Movie extends Form {
     _id: Joi.string(),
     title: Joi.string().required().label('Title'),
     genreId: Joi.string().required().label('Genre'),
-    numberInStock: Joi.number().required().min(0).max(100).label('Number in Stock'),
+    amountInStock: Joi.number().required().min(0).max(100).label('Number in Stock'),
     dailyRentalRate: Joi.number().required().min(0).max(10).label('Rate')
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const { navigate } = this.props;
-    const genres = [ ...getGenres() ];
+    const genres = [ ...await getGenres() ];
     
     this.setState({ genres });
 
@@ -36,7 +38,7 @@ class Movie extends Form {
       return;
     }
 
-    const movie = getMovie(movieId);
+    const movie = await getMovie(movieId);
     
     if (!movie) {
       navigate({ pathname: '/not-found' });
@@ -52,16 +54,19 @@ class Movie extends Form {
       _id: movie._id,
       title: movie.title,
       genreId: movie.genre._id,
-      numberInStock: movie.numberInStock,
+      amountInStock: movie.amountInStock,
       dailyRentalRate: movie.dailyRentalRate
     }
   }
 
-  doSubmit = () => {
+  doSubmit = async () => {
     const { navigate } = this.props;
     const movie = { ...this.state.data };
 
-    saveMovie(movie);
+    movie.amountInStock = parseInt(movie.amountInStock);
+    movie.dailyRentalRate = parseInt(movie.dailyRentalRate);
+
+    await saveMovie(movie);
     
     navigate({ pathname: '/movies' });
   };
@@ -78,7 +83,7 @@ class Movie extends Form {
             <form onSubmit={ this.handleSubmit }>
               { this.renderFormInput('Title', 'title') }
               { this.renderFormSelect('Genre', 'genreId', genres) }
-              { this.renderFormInput('Number in Stock', 'numberInStock', 'number') }
+              { this.renderFormInput('Number in Stock', 'amountInStock', 'number') }
               { this.renderFormInput('Rate', 'dailyRentalRate', 'number') }
               { this.renderFormButton('Save') }
             </form>
