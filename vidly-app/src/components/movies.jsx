@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import { toast } from 'react-toastify';
 import MoviesTable from './moviesTable';
 import Filter from './common/filter';
 import Search from './common/search';
 import Pagination from './common/pagination';
-// import { getMovies, deleteMovie } from '../services/fakeMovieService';
 import { getMovies, deleteMovie } from '../services/movieService';
 import { getGenres } from '../services/genreService';
 import { paginate } from '../utils/paginate';
@@ -22,9 +22,11 @@ class Movies extends Component {
   };
 
   async componentDidMount() {
-    const genres = [ { _id: '', name: 'All genres' }, ...await getGenres() ];
+    const { data } = await getGenres();
+    const genres = [ { _id: '', name: 'All genres' }, ...data ];
+    const { data: movies } = await getMovies();
 
-    this.setState({ movies: await getMovies(), genres });
+    this.setState({ movies, genres });
   }
 
   getpaginatedData() {
@@ -86,11 +88,22 @@ class Movies extends Component {
   };
 
   handleDeleteMovie = async (id) => {
-    const movies = this.state.movies.filter(movie => movie._id !== id);
+    const initialMoviesState = this.state.movies;
+    const movies = initialMoviesState.filter(movie => movie._id !== id);
 
-    await deleteMovie(id);
+    this.setState({ movies });
 
-    this.setState({ movies })
+    try {
+      await deleteMovie(id);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        const { data: message } = error.response;
+
+        toast.error(message);
+      }
+
+      this.setState({ movies: initialMoviesState });
+    }
   };
 
   handleSortMovie = (sortColumn) => {

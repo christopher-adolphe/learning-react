@@ -1,8 +1,7 @@
 import React from 'react';
 import Joi from 'joi-browser';
+import { toast } from 'react-toastify';
 import Form from './common/form';
-// import { getGenres } from '../services/fakeGenreService';
-// import { getMovie, saveMovie } from '../services/fakeMovieService';
 import { getGenres } from '../services/genreService';
 import { getMovie, saveMovie } from '../services/movieService';
 
@@ -27,26 +26,37 @@ class Movie extends Form {
   };
 
   async componentDidMount() {
-    const { navigate } = this.props;
-    const genres = [ ...await getGenres() ];
+    await this.populateGenres();
+    await this.populateMovie();
+  }
+
+  async populateGenres() {
+    const { data: genres } = await getGenres();
     
     this.setState({ genres });
+  }
 
-    const movieId = this.props.match.params.id;
+  async populateMovie() {
+    try {
+      const movieId = this.props.match.params.id;
 
-    if (movieId === 'new') {
-      return;
+      if (!movieId) {
+        return;
+      }
+
+      const { data: movie } = await getMovie(movieId);
+
+      this.setState({ data: this.mapToViewModel(movie) });
+    } catch (error) {
+      const { navigate } = this.props;
+
+      if (error.response && error.response.status === 404) {
+        const { data: message } = error.response;
+
+        toast.error(message);
+        navigate({ pathname: '/not-found' });
+      }
     }
-
-    const movie = await getMovie(movieId);
-    
-    if (!movie) {
-      navigate({ pathname: '/not-found' });
-
-      return;
-    }
-
-    this.setState({ data: this.mapToViewModel(movie) });
   }
 
   mapToViewModel(movie) {

@@ -1,37 +1,25 @@
 import http from './httpService';
-import config from '../config.json';
+import { apiEndpoint } from '../config.json';
 
-export async function getMovies() {
-  const { data: movies } = await http.get(`${config.apiEndpoint}/movies`);
-
-  return movies;
+export function getMovies() {
+  return http.get(`${apiEndpoint}/movies`);
 }
 
-export async function getMovie(id) {
-  const { data: movie } = await http.get(`${config.apiEndpoint}/movies/${id}`);
-
-  return movie;
+export function getMovie(id) {
+  return http.get(`${apiEndpoint}/movies/${id}`);
 }
 
-export async function saveMovie(movie) {
-  try {
-    if (movie._id) {
-      const id = movie._id
-      delete movie._id;
+export function saveMovie(movie) {
+  if (movie._id) {
+    const id = movie._id
+    delete movie._id;
 
-      await http.put(`${config.apiEndpoint}/movies/${id}`, movie);
-    } else {
-      await http.post(`${config.apiEndpoint}/movies`, movie);
-    }
-  } catch (error) {
-    console.log(error);
+    return http.put(`${apiEndpoint}/movies/${id}`, movie);
   }
+
+  return http.post(`${apiEndpoint}/movies`, movie);
 }
 
-export async function deleteMovie(id) {
-  try {
-    await http.delete(`${config.apiEndpoint}/movies/${id}`);
-  } catch (error) {
-    console.log(error);
-  }
+export function deleteMovie(id) {
+  return http.delete(`${apiEndpoint}/movies/${id}`);
 }

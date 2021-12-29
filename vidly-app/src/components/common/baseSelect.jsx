@@ -9,11 +9,11 @@ const BaseSelect = ({ label, name, options, value, error, onInputChange }) => {
   return (
     <div className="mb-3">
       <label htmlFor={ name } className="form-label">{ label }</label>
-      <select className={ selectClasses } id={ name } name={ name } onChange={ onInputChange }>
+      <select className={ selectClasses } id={ name } name={ name } value={ value } onChange={ onInputChange }>
         <option value="" />
         {
           options.map(option => (
-            <option key={ option._id } value={ option._id } selected={ option._id === value ? true : false }>{ option.name }</option>
+            <option key={ option._id } value={ option._id }>{ option.name }</option>
           ))
         }
       </select>
