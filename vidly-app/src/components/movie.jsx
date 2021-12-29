@@ -1,15 +1,16 @@
 import React from 'react';
 import Joi from 'joi-browser';
+import { toast } from 'react-toastify';
 import Form from './common/form';
-import { getGenres } from '../services/fakeGenreService';
-import { getMovie, saveMovie } from '../services/fakeMovieService';
+import { getGenres } from '../services/genreService';
+import { getMovie, saveMovie } from '../services/movieService';
 
 class Movie extends Form {
   state = {
     data: {
       title: '',
       genreId: '',
-      numberInStock: '',
+      amountInStock: '',
       dailyRentalRate: '',
     },
     genres: [],
@@ -20,31 +21,42 @@ class Movie extends Form {
     _id: Joi.string(),
     title: Joi.string().required().label('Title'),
     genreId: Joi.string().required().label('Genre'),
-    numberInStock: Joi.number().required().min(0).max(100).label('Number in Stock'),
+    amountInStock: Joi.number().required().min(0).max(100).label('Number in Stock'),
     dailyRentalRate: Joi.number().required().min(0).max(10).label('Rate')
   };
 
-  componentDidMount() {
-    const { navigate } = this.props;
-    const genres = [ ...getGenres() ];
+  async componentDidMount() {
+    await this.populateGenres();
+    await this.populateMovie();
+  }
+
+  async populateGenres() {
+    const { data: genres } = await getGenres();
     
     this.setState({ genres });
+  }
 
-    const movieId = this.props.match.params.id;
+  async populateMovie() {
+    try {
+      const movieId = this.props.match.params.id;
 
-    if (movieId === 'new') {
-      return;
+      if (!movieId) {
+        return;
+      }
+
+      const { data: movie } = await getMovie(movieId);
+
+      this.setState({ data: this.mapToViewModel(movie) });
+    } catch (error) {
+      const { navigate } = this.props;
+
+      if (error.response && error.response.status === 404) {
+        const { data: message } = error.response;
+
+        toast.error(message);
+        navigate({ pathname: '/not-found' });
+      }
     }
-
-    const movie = getMovie(movieId);
-    
-    if (!movie) {
-      navigate({ pathname: '/not-found' });
-
-      return;
-    }
-
-    this.setState({ data: this.mapToViewModel(movie) });
   }
 
   mapToViewModel(movie) {
@@ -52,16 +64,19 @@ class Movie extends Form {
       _id: movie._id,
       title: movie.title,
       genreId: movie.genre._id,
-      numberInStock: movie.numberInStock,
+      amountInStock: movie.amountInStock,
       dailyRentalRate: movie.dailyRentalRate
     }
   }
 
-  doSubmit = () => {
+  doSubmit = async () => {
     const { navigate } = this.props;
     const movie = { ...this.state.data };
 
-    saveMovie(movie);
+    movie.amountInStock = parseInt(movie.amountInStock);
+    movie.dailyRentalRate = parseInt(movie.dailyRentalRate);
+
+    await saveMovie(movie);
     
     navigate({ pathname: '/movies' });
   };
@@ -78,7 +93,7 @@ class Movie extends Form {
             <form onSubmit={ this.handleSubmit }>
               { this.renderFormInput('Title', 'title') }
               { this.renderFormSelect('Genre', 'genreId', genres) }
-              { this.renderFormInput('Number in Stock', 'numberInStock', 'number') }
+              { this.renderFormInput('Number in Stock', 'amountInStock', 'number') }
               { this.renderFormInput('Rate', 'dailyRentalRate', 'number') }
               { this.renderFormButton('Save') }
             </form>
