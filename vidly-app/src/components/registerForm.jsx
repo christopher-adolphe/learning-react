@@ -1,6 +1,8 @@
 import React from 'react';
 import Joi from 'joi-browser';
+import { toast } from 'react-toastify';
 import Form from './common/form';
+import { register } from '../services/userService';
 
 class RegisterForm extends Form {
   state = {
@@ -14,10 +16,29 @@ class RegisterForm extends Form {
     name: Joi.string().required().label("Name")
   };
 
-  doSubmit = () => {
-    // TODO: Perform call to server to send data from the form
-    console.log('doSubmit called to register!');
+  doSubmit = async () => {
+    try {
+      const { username: email, password, name } = this.state.data;
+
+      await register({ name, email, password });
+
+      toast.success('User was successfully registered');
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const { data: errorMessage } = error.response;
+
+        toast.error(errorMessage);
+      }
+    }
+
+    this.resetForm();
   };
+
+  resetForm() {
+    const data = { username: '', password: '', name: '' };
+
+    this.setState({ data });
+  }
 
   render() { 
     return (

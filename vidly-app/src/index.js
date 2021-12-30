@@ -21,6 +21,13 @@ const MovieWrapper = (props) => {
   return <Movie { ...{ ...props, match: { params }, navigate } } />
 };
 
+const LoginFormWrapper = (props) => {
+  const navigate= useNavigate();
+  const params = useParams();
+
+  return <LoginForm { ...{ ...props, match: { params }, navigate } } />
+};
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
@@ -32,7 +39,7 @@ ReactDOM.render(
           <Route path="movies" element={ <Movies /> } />
           <Route path="customers" element={ <Customers /> } />
           <Route path="rentals" element={ <Rentals /> } />
-          <Route path="login" element={ <LoginForm /> } />
+          <Route path="login" element={ <LoginFormWrapper /> } />
           <Route path="register" element={ <RegisterForm /> } />
           <Route path="not-found" element={ <NotFound /> } />
           <Route path="*" element={ <NotFound /> } />

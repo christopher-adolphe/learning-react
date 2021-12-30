@@ -1,6 +1,8 @@
 import React from 'react';
 import Joi from 'joi-browser';
+import { toast } from 'react-toastify';
 import Form from './common/form';
+import { login } from '../services/authenticationService';
 
 class LoginForm extends Form {
   // Using the `createRef()` method to add a reference to
@@ -32,10 +34,30 @@ class LoginForm extends Form {
     password: Joi.string().required().label('Password')
   };
 
-  doSubmit = () => {
-    // TODO: Perform call to server to send data from the form
-    console.log('doSubmit called to login!');
+  doSubmit = async () => {
+    try {
+      const { navigate } = this.props;
+      const { username: email, password } = this.state.data;
+      const { data: token } = await login({ email, password });
+
+      localStorage.setItem('token', token);
+      navigate({ pathname: '/' });
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const { data: errorMessage } = error.response;
+
+        toast.error(errorMessage);
+      }
+    }
+
+    this.resetForm();
   };
+
+  resetForm() {
+    const data = { username: '', password: '' };
+
+    this.setState({ data });
+  }
 
   render() {
     return (
