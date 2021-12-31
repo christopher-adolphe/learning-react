@@ -5,6 +5,7 @@ import Form from './common/form';
 import { login } from '../services/authenticationService';
 
 class LoginForm extends Form {
+  _isMounted = false;
   // Using the `createRef()` method to add a reference to
   // an element in the component's jsx template so that we
   // can get access to this DOM element inside the component's
@@ -34,6 +35,14 @@ class LoginForm extends Form {
     password: Joi.string().required().label('Password')
   };
 
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   doSubmit = async () => {
     try {
       const { navigate } = this.props;
@@ -56,7 +65,9 @@ class LoginForm extends Form {
   resetForm() {
     const data = { username: '', password: '' };
 
-    this.setState({ data });
+    if (this._isMounted) {
+      this.setState({ data });
+    }
   }
 
   render() {

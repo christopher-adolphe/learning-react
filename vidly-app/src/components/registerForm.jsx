@@ -5,6 +5,8 @@ import Form from './common/form';
 import { register } from '../services/userService';
 
 class RegisterForm extends Form {
+  _isMounted = false;
+
   state = {
     data: { username: '', password: '', name: '' },
     errors: {}
@@ -16,13 +18,24 @@ class RegisterForm extends Form {
     name: Joi.string().required().label("Name")
   };
 
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   doSubmit = async () => {
     try {
+      const { navigate } = this.props;
       const { username: email, password, name } = this.state.data;
 
-      await register({ name, email, password });
+      const response = await register({ name, email, password });
 
+      localStorage.setItem('token', response.headers['x-auth-token']);
       toast.success('User was successfully registered');
+      navigate({ pathname: '/' });
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const { data: errorMessage } = error.response;
@@ -37,7 +50,9 @@ class RegisterForm extends Form {
   resetForm() {
     const data = { username: '', password: '', name: '' };
 
-    this.setState({ data });
+    if (this._isMounted) {
+      this.setState({ data });
+    }
   }
 
   render() { 
