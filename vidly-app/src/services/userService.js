@@ -6,3 +6,7 @@ const apiEndpoint = `${apiUrl}/users`;
 export function register(user) {
   return http.post(`${apiEndpoint}`, user);
 }
+
+export default {
+  register
+}

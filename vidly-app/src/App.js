@@ -1,8 +1,8 @@
 import { Fragment, Component } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import jwtDecode from 'jwt-decode';
 import NavBar from './components/navBar';
+import authService from './services/authenticationService';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
@@ -12,12 +12,9 @@ class App extends Component {
   };
 
   componentDidMount() {
-    try {
-      const token = localStorage.getItem('token');
-      const user = jwtDecode(token);
-      
-      this.setState({ user });
-    } catch (error) {}
+    const user = authService.getUser();
+    
+    this.setState({ user });
   }
 
   render() {

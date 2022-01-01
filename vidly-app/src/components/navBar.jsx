@@ -23,7 +23,7 @@ const NavBar = ({ user }) => {
 
             {
               user ?
-              <Fragment>
+              (<Fragment>
                 <li className="nav-item">
                   <NavLink className="nav-link" to="profile">Profile</NavLink>
                 </li>
@@ -31,8 +31,8 @@ const NavBar = ({ user }) => {
                 <li className="nav-item">
                   <NavLink className="nav-link" to="logout">Logout</NavLink>
                 </li>
-              </Fragment> :
-              <Fragment>
+              </Fragment>) :
+              (<Fragment>
                 <li className="nav-item">
                   <NavLink className="nav-link" to="login">Login</NavLink>
                 </li>
@@ -40,14 +40,14 @@ const NavBar = ({ user }) => {
                 <li className="nav-item">
                   <NavLink className="nav-link" to="register">Register</NavLink>
                 </li>
-              </Fragment>
+              </Fragment>)
             }
 
           </ul>
         </div>
 
         {
-          user ? <div className="d-flex"><span className="badge bg-primary">{ user.name }</span></div> : ''
+          user ? (<div className="d-flex"><span className="badge bg-primary">{ user.name }</span></div>) : null
         }
       </div>
     </nav>

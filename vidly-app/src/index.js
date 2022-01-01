@@ -11,6 +11,7 @@ import Customers from './components/customers';
 import Rentals from './components/rentals';
 import LoginForm from './components/loginForm';
 import RegisterForm from './components/registerForm';
+import Logout from './components/logout';
 import NotFound from './components/notFound';
 import reportWebVitals from './reportWebVitals';
 
@@ -19,18 +20,6 @@ const MovieWrapper = (props) => {
   const params = useParams();
 
   return <Movie { ...{ ...props, match: { params }, navigate } } />
-};
-
-const LoginFormWrapper = (props) => {
-  const navigate= useNavigate();
-
-  return <LoginForm { ...{ ...props, navigate } } />
-};
-
-const RegisterFormWrapper = (props) => {
-  const navigate= useNavigate();
-
-  return <RegisterForm { ...{ ...props, navigate } } />
 };
 
 ReactDOM.render(
@@ -44,8 +33,9 @@ ReactDOM.render(
           <Route path="movies" element={ <Movies /> } />
           <Route path="customers" element={ <Customers /> } />
           <Route path="rentals" element={ <Rentals /> } />
-          <Route path="login" element={ <LoginFormWrapper /> } />
-          <Route path="register" element={ <RegisterFormWrapper /> } />
+          <Route path="login" element={ <LoginForm /> } />
+          <Route path="register" element={ <RegisterForm /> } />
+          <Route path="logout" element={ <Logout /> } />
           <Route path="not-found" element={ <NotFound /> } />
           <Route path="*" element={ <NotFound /> } />
         </Route>

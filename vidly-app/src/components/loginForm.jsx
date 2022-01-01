@@ -2,7 +2,7 @@ import React from 'react';
 import Joi from 'joi-browser';
 import { toast } from 'react-toastify';
 import Form from './common/form';
-import { login } from '../services/authenticationService';
+import authenticationService from '../services/authenticationService';
 
 class LoginForm extends Form {
   _isMounted = false;
@@ -45,12 +45,10 @@ class LoginForm extends Form {
 
   doSubmit = async () => {
     try {
-      const { navigate } = this.props;
       const { username: email, password } = this.state.data;
-      const { data: token } = await login({ email, password });
 
-      localStorage.setItem('token', token);
-      navigate({ pathname: '/' });
+      await authenticationService.login({ email, password });
+      window.location = '/';
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const { data: errorMessage } = error.response;
