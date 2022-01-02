@@ -23,7 +23,11 @@ const MovieWrapper = (props) => {
   return <Movie { ...{ ...props, match: { params }, navigate } } />
 };
 
-const user = authenticationService.getUser();
+const ProtectRoute = (element) => {
+  const user = authenticationService.getUser();
+
+  return user ? element : <Navigate to="/login" />;
+}
 
 ReactDOM.render(
   <React.StrictMode>
@@ -31,8 +35,8 @@ ReactDOM.render(
       <Routes>
         <Route path="/" element={ <App /> }>
           <Route index element={ <Movies /> } />
-          <Route path="movies/:id" element={ user ? <MovieWrapper /> : <Navigate to="/login" /> } />
-          <Route path="movies/new" element={ user ? <MovieWrapper /> : <Navigate to="/login" /> } />
+          <Route path="movies/:id" element={ ProtectRoute(<MovieWrapper />) } />
+          <Route path="movies/new" element={ ProtectRoute(<MovieWrapper />) } />
           <Route path="movies" element={ <Movies /> } />
           <Route path="customers" element={ <Customers /> } />
           <Route path="rentals" element={ <Rentals /> } />
