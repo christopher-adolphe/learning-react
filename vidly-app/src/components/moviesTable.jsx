@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Table from './common/table';
@@ -9,7 +9,7 @@ class MoviesTable extends Component {
     {
       path: 'title',
       label: 'Title',
-      content: (movie) => <Link to={ `/movies/${movie._id}` }>{ movie.title }</Link>
+      content: (movie) => (this.props.user && this.props.user.isAdmin) ? (<Link to={ `/movies/${movie._id}` }>{ movie.title }</Link>) : (<Fragment>{ movie.title }</Fragment>)
     },
     { path: 'genre.name', label: 'Genre' },
     { path: 'amountInStock', label: 'Stock' },
@@ -20,7 +20,7 @@ class MoviesTable extends Component {
     },
     {
       key: 'delete',
-      content: (movie) => <button className="btn btn-danger btn-sm" onClick={ () => this.props.onDeleteMovie(movie._id) }>Delete</button>
+      content: (movie) => <button className="btn btn-danger btn-sm" onClick={ () => this.props.onDeleteMovie(movie._id) } disabled={ !(this.props.user && this.props.user.isAdmin) }>Delete</button>
     }
   ];
 

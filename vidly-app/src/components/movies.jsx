@@ -8,6 +8,7 @@ import Search from './common/search';
 import Pagination from './common/pagination';
 import { getMovies, deleteMovie } from '../services/movieService';
 import { getGenres } from '../services/genreService';
+import authenticationService from '../services/authenticationService';
 import { paginate } from '../utils/paginate';
 
 class Movies extends Component {
@@ -18,15 +19,17 @@ class Movies extends Component {
     currentFilter: 'All genres',
     pageSize: 4,
     sortColumn: { path: 'title', order: 'asc' },
-    searchQuery: ''
+    searchQuery: '',
+    user: null
   };
 
   async componentDidMount() {
     const { data } = await getGenres();
     const genres = [ { _id: '', name: 'All genres' }, ...data ];
     const { data: movies } = await getMovies();
+    const user = authenticationService.getUser();
 
-    this.setState({ movies, genres });
+    this.setState({ movies, genres, user });
   }
 
   getpaginatedData() {
@@ -47,7 +50,7 @@ class Movies extends Component {
   }
 
   displayMovies() {
-    const { genres, currentPage, currentFilter, pageSize, sortColumn, searchQuery } = this.state;
+    const { genres, currentPage, currentFilter, pageSize, sortColumn, searchQuery, user } = this.state;
     const { count, paginatedData: movies } = this.getpaginatedData();
 
     return count
@@ -57,7 +60,7 @@ class Movies extends Component {
               <Filter genres={ genres } currentFilter= { currentFilter } onFilterChange={ this.handleFilterChange } />
             </div>
             <div className="col">
-              <Link className="btn btn-primary mb-4" to="/movies/new">New Movie</Link>
+              { (user && user.isAdmin) ? (<Link className="btn btn-primary mb-4" to="/movies/new">New Movie</Link>) : null }
 
               <p>Showing { `${count} ${count > 1 ? `movies` : `movie`} ` } in the database</p>
 
@@ -68,7 +71,8 @@ class Movies extends Component {
                 sortColumn={ sortColumn }
                 onLikeMovie={ this.handleLike }
                 onDeleteMovie={ this.handleDeleteMovie }
-                onSortMovie={ this.handleSortMovie } />
+                onSortMovie={ this.handleSortMovie }
+                user= { user } />
 
               <Pagination itemCount={ count } currentPage={ currentPage } pageSize={ pageSize } onPageChange={ this.handlePageChange } />
             </div>

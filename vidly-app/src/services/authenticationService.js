@@ -5,6 +5,8 @@ import { apiUrl } from '../config.json';
 const apiEndpoint = `${apiUrl}/auth`;
 const tokenKey = 'token';
 
+http.setAuthorizationToken(getToken());
+
 export async function login(user) {
   const { data: token } = await http.post(apiEndpoint, user);
 
@@ -29,9 +31,16 @@ export function getUser() {
   }
 }
 
-export default {
+export function getToken() {
+  return localStorage.getItem(tokenKey);
+}
+
+const authenticationService = {
   login,
   autoLogin,
   logout,
-  getUser
-}
+  getUser,
+  getToken
+};
+
+export default authenticationService;

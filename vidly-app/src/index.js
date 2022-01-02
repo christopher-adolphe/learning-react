@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Routes, Route, useParams, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useParams, useNavigate, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
 import './index.css';
@@ -14,6 +14,7 @@ import RegisterForm from './components/registerForm';
 import Logout from './components/logout';
 import NotFound from './components/notFound';
 import reportWebVitals from './reportWebVitals';
+import authenticationService from './services/authenticationService';
 
 const MovieWrapper = (props) => {
   const navigate = useNavigate();
@@ -22,14 +23,16 @@ const MovieWrapper = (props) => {
   return <Movie { ...{ ...props, match: { params }, navigate } } />
 };
 
+const user = authenticationService.getUser();
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={ <App /> }>
           <Route index element={ <Movies /> } />
-          <Route path="movies/:id" element={ <MovieWrapper /> } />
-          <Route path="movies/new" element={ <MovieWrapper /> } />
+          <Route path="movies/:id" element={ user ? <MovieWrapper /> : <Navigate to="/login" /> } />
+          <Route path="movies/new" element={ user ? <MovieWrapper /> : <Navigate to="/login" /> } />
           <Route path="movies" element={ <Movies /> } />
           <Route path="customers" element={ <Customers /> } />
           <Route path="rentals" element={ <Rentals /> } />

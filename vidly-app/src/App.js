@@ -2,7 +2,7 @@ import { Fragment, Component } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import NavBar from './components/navBar';
-import authService from './services/authenticationService';
+import authenticationService from './services/authenticationService';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
@@ -12,7 +12,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const user = authService.getUser();
+    const user = authenticationService.getUser();
     
     this.setState({ user });
   }
