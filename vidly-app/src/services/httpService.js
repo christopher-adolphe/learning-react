@@ -10,6 +10,9 @@ const http = {
   setAuthorizationToken
 };
 
+// Setting a default `baseURL` for axios from the environment variables
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+
 // Using `axios interceptors` to run a callback function to intercept errors
 // on any response. The `use()` method takes 2 functions as argument; the 1st
 // callback function is called when the response is successful while the 2nd

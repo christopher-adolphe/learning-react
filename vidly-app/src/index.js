@@ -16,6 +16,8 @@ import NotFound from './components/notFound';
 import reportWebVitals from './reportWebVitals';
 import authenticationService from './services/authenticationService';
 
+console.log('SUPERMAN: ', process.env.REACT_APP_NAME);
+
 const MovieWrapper = (props) => {
   const navigate = useNavigate();
   const params = useParams();
