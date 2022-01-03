@@ -72,7 +72,7 @@ class Movies extends Component {
                 onLikeMovie={ this.handleLike }
                 onDeleteMovie={ this.handleDeleteMovie }
                 onSortMovie={ this.handleSortMovie }
-                user= { user } />
+              />
 
               <Pagination itemCount={ count } currentPage={ currentPage } pageSize={ pageSize } onPageChange={ this.handlePageChange } />
             </div>
