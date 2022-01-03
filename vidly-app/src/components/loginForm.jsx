@@ -1,8 +1,11 @@
 import React from 'react';
 import Joi from 'joi-browser';
+import { toast } from 'react-toastify';
 import Form from './common/form';
+import authenticationService from '../services/authenticationService';
 
 class LoginForm extends Form {
+  _isMounted = false;
   // Using the `createRef()` method to add a reference to
   // an element in the component's jsx template so that we
   // can get access to this DOM element inside the component's
@@ -32,10 +35,38 @@ class LoginForm extends Form {
     password: Joi.string().required().label('Password')
   };
 
-  doSubmit = () => {
-    // TODO: Perform call to server to send data from the form
-    console.log('doSubmit called to login!');
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  doSubmit = async () => {
+    try {
+      const { username: email, password } = this.state.data;
+
+      await authenticationService.login({ email, password });
+      window.location = '/';
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const { data: errorMessage } = error.response;
+
+        toast.error(errorMessage);
+      }
+    }
+
+    this.resetForm();
   };
+
+  resetForm() {
+    const data = { username: '', password: '' };
+
+    if (this._isMounted) {
+      this.setState({ data });
+    }
+  }
 
   render() {
     return (
