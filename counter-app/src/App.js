@@ -115,7 +115,7 @@ class App extends Component {
 
           <hr />
 
-          <h3>Example of High Order Component</h3>
+          <h3>Example of Higher Order Component</h3>
 
           <Movie tooltipText={ 'This is the tooltip text' } />
 
