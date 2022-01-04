@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Navbar  from './components/navbar';
 import Counters from './components/counters';
+import Movie from './hoc/Movie';
 import './App.css';
+import Counter from './hooks/Counter';
 
 // React Component Lifecylce Hook
 // 1. Mounting Phase: When an instance of a component is created
@@ -110,6 +112,18 @@ class App extends Component {
             onDelete={ this.handleDelete }
             onReset={ this.handleReset }
           />
+
+          <hr />
+
+          <h3>Example of High Order Component</h3>
+
+          <Movie tooltipText={ 'This is the tooltip text' } />
+
+          <hr />
+
+          <h3>Example of Functional Component with State using Hooks</h3>
+
+          <Counter />
         </main>
       </React.Fragment>
     );
