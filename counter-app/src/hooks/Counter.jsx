@@ -1,4 +1,5 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
+import useDocumentTitle from './useDocumentTitle';
 
 function Counter(props) {
   // Using the `useState()` hook to make state available inside the functional component
@@ -18,6 +19,27 @@ function Counter(props) {
   // prefix the name of the function to update the state with `set`; meaning if we name the state
   // `age`, we should name the function to update the state as `setAge`
   const [ name, setName ] = useState('');
+
+  // Using the `useEffect()` hook to be able to hook into the component's lifecycle methods. It
+  // provides a single place where we can implement lifecycle dependent logics in functional
+  // components as `componentDidMount()`, `componentDidUpdate()` and `componentWillUnmount()` methods
+  // cannot be used there. The `useEffect()` hook takes 2 arguments; the 1st argument is a function
+  // with is called everytime the component renders (i.e it applies to `componentDidMount()` and
+  // `componentDidUpdate()`). The 2nd argument is an array where is specify the dependencies under
+  // the 1st argument function should be called. If we need to implement logic dependent on the
+  // `componentWillUnmount()` method inside a function component, then we return a function from the
+  // 1st argument function in the `useEffect()` hook
+  // useEffect(() => {
+  //   document.title = `Clicked ${count} times!`;
+
+  //   return () => {
+  //     console.log('Clean up code goes here!');
+  //   }
+  // }, [count]);
+
+  // Using a custom hook
+  useDocumentTitle(`Clicked ${count} times!`);
+
 
   return (
     <Fragment>

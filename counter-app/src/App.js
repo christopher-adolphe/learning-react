@@ -4,6 +4,7 @@ import Counters from './components/counters';
 import Movie from './hoc/Movie';
 import './App.css';
 import Counter from './hooks/Counter';
+import Users from './hooks/users';
 
 // React Component Lifecylce Hook
 // 1. Mounting Phase: When an instance of a component is created
@@ -124,6 +125,12 @@ class App extends Component {
           <h3>Example of Functional Component with State using Hooks</h3>
 
           <Counter />
+
+          <hr />
+
+          <h3>Example of Fetching Data using Hooks</h3>
+
+          <Users />
         </main>
       </React.Fragment>
     );
