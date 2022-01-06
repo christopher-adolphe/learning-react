@@ -1,6 +1,7 @@
 import React from 'react';
 import Joi from 'joi-browser';
 import { toast } from 'react-toastify';
+import withRouterHooks from './common/withRouterHooks';
 import Form from './common/form';
 import { getGenres } from '../services/genreService';
 import { getMovie, saveMovie } from '../services/movieService';
@@ -104,4 +105,4 @@ class Movie extends Form {
   }
 }
  
-export default Movie;
+export default withRouterHooks(Movie);
