@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import Navbar  from './components/navbar';
 import Counters from './components/counters';
 import Movie from './hoc/Movie';
-import './App.css';
 import Counter from './hooks/Counter';
 import Users from './hooks/users';
+import MoviePage from './context/moviePage';
+import UserContext from './context/userContext';
+import CartContext from './context/cartContext';
+import './App.css';
+import Login from './context/login';
 
 // React Component Lifecylce Hook
 // 1. Mounting Phase: When an instance of a component is created
@@ -30,6 +34,14 @@ class App extends Component {
       { id: 2, value: 6 },
       { id: 3, value: 0 },
       { id: 4, value: 12 }
+    ],
+    currentUser: {
+      name: 'Melissa McCarthy',
+      role: 'author'
+    },
+    cart: [
+      { name: 'Prod 1', price: 9.99 },
+      { name: 'Prod 2', price: 12.99 }
     ]
   };
 
@@ -97,6 +109,12 @@ class App extends Component {
     this.setState({ counters });
   }
 
+  handleLoggedIn = (user) => {
+    console.log('handleLoggedIn called: ', user);
+
+    this.setState({ currentUser: user });
+  };
+
   render() {
     console.log('App - render() method called');
     // This is the place where a React element representing the virtual DOM is
@@ -131,6 +149,21 @@ class App extends Component {
           <h3>Example of Fetching Data using Hooks</h3>
 
           <Users />
+
+          <hr />
+
+          <h3>Example of Context in React</h3>
+          {/* Using the `UserContext` as a Provider to wrap the MoviePage component */}
+          {/* The `UserContext` is a regular React Component and when we use it as a */}
+          {/* provider, we can pass data down the component tree by using its `value` */}
+          {/* prop */}
+          <CartContext.Provider value={ this.state.cart }>
+            <UserContext.Provider value={ { currentUser: this.state.currentUser, onLoggedIn: this.handleLoggedIn } }>
+              <MoviePage />
+
+              <Login />
+            </UserContext.Provider>
+          </CartContext.Provider>
         </main>
       </React.Fragment>
     );

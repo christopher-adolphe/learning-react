@@ -24,10 +24,10 @@ function Counter(props) {
   // provides a single place where we can implement lifecycle dependent logics in functional
   // components as `componentDidMount()`, `componentDidUpdate()` and `componentWillUnmount()` methods
   // cannot be used there. The `useEffect()` hook takes 2 arguments; the 1st argument is a function
-  // with is called everytime the component renders (i.e it applies to `componentDidMount()` and
+  // which is called everytime the component renders (i.e it applies to `componentDidMount()` and
   // `componentDidUpdate()`). The 2nd argument is an array where is specify the dependencies under
   // the 1st argument function should be called. If we need to implement logic dependent on the
-  // `componentWillUnmount()` method inside a function component, then we return a function from the
+  // `componentWillUnmount()` method inside a functional component, then we return a function from the
   // 1st argument function in the `useEffect()` hook
   // useEffect(() => {
   //   document.title = `Clicked ${count} times!`;
