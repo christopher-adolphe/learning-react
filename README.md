@@ -1,5 +1,5 @@
-# learning-react
-Learn to build React apps like a pro.
+# Mastering React
+Understand React inside out and learn to build React apps like a pro.
 
 ## Purpose
 To master all the essential skills I need to build professional quality apps with React such as:
