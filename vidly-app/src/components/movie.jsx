@@ -5,8 +5,11 @@ import withRouterHooks from './common/withRouterHooks';
 import Form from './common/form';
 import { getGenres } from '../services/genreService';
 import { getMovie, saveMovie } from '../services/movieService';
+import AppContext from '../context/appContext';
 
 class Movie extends Form {
+  static contextType = AppContext;
+  
   state = {
     data: {
       title: '',
@@ -27,8 +30,17 @@ class Movie extends Form {
   };
 
   async componentDidMount() {
-    await this.populateGenres();
-    await this.populateMovie();
+    const { onToggleLoader } = this.context;
+
+    try {
+      onToggleLoader(true);
+      await this.populateGenres();
+      await this.populateMovie();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      onToggleLoader(false);
+    }
   }
 
   async populateGenres() {

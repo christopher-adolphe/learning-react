@@ -10,8 +10,11 @@ import { getMovies, deleteMovie } from '../services/movieService';
 import { getGenres } from '../services/genreService';
 import authenticationService from '../services/authenticationService';
 import { paginate } from '../utils/paginate';
+import AppContext from '../context/appContext';
 
 class Movies extends Component {
+  static contextType = AppContext;
+
   state = {
     movies: [],
     genres: [],
@@ -24,12 +27,22 @@ class Movies extends Component {
   };
 
   async componentDidMount() {
-    const { data } = await getGenres();
-    const genres = [ { _id: '', name: 'All genres' }, ...data ];
-    const { data: movies } = await getMovies();
-    const user = authenticationService.getUser();
+    const { onToggleLoader } = this.context;
+    
+    try {
+      onToggleLoader(true);
 
-    this.setState({ movies, genres, user });
+      const { data } = await getGenres();
+      const genres = [ { _id: '', name: 'All genres' }, ...data ];
+      const { data: movies } = await getMovies();
+      const user = authenticationService.getUser();
+
+      this.setState({ movies, genres, user });
+    } catch (error) {
+      console.log(error)
+    } finally {
+      onToggleLoader(false);
+    }
   }
 
   getpaginatedData() {
